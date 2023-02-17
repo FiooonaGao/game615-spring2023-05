@@ -1,6 +1,9 @@
+using TMPro;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms.Impl;
+
 #endif
 
 namespace StarterAssets
@@ -13,12 +16,34 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 
+		public float TimeLeft;
+		public bool TimerOn = false;
+		public TextMeshProUGUI ScoreText;
+		public TextMeshProUGUI TimerText;
+		public TextMeshProUGUI LooseText;
+		public TextMeshProUGUI WinText;
+		public int score;
+		public int IntTimeLeft;
+		public bool GameOn = false;
+
+
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
+
+		void Start()
+		{
+			score = 1;
+			TimerOn = true;
+			GameOn = true;
+			TimeLeft = 30;
+			LooseText.enabled = false;
+			WinText.enabled = false;
+		}
+
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
@@ -28,7 +53,7 @@ namespace StarterAssets
 
 		public void OnLook(InputValue value)
 		{
-			if(cursorInputForLook)
+			if (cursorInputForLook)
 			{
 				LookInput(value.Get<Vector2>());
 			}
@@ -49,7 +74,7 @@ namespace StarterAssets
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
-		} 
+		}
 
 		public void LookInput(Vector2 newLookDirection)
 		{
@@ -65,7 +90,7 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
-		
+
 		private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
@@ -75,6 +100,47 @@ namespace StarterAssets
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.CompareTag("target"))
+			{
+				Destroy(other.gameObject);
+				ScoreText.text = score.ToString();
+				score++;
+			}
+		}
+
+
+		void Update()
+		{
+			if (TimerOn)
+			{
+				if (TimeLeft > 0 && score < 7)
+				{
+					TimeLeft -= Time.deltaTime;
+					IntTimeLeft = (int)Mathf.Round(TimeLeft);
+					TimerText.text = IntTimeLeft.ToString();
+				}
+				else if (TimeLeft > 0 && score == 7)
+				{
+					WinText.enabled = true;
+
+					GameOn = false;
+				}
+				else
+				{
+					TimeLeft = 0;
+					TimerText.text = TimeLeft.ToString();
+					IntTimeLeft = (int)Mathf.Round(TimeLeft);
+					TimerOn = false;
+					LooseText.enabled = true;
+
+					GameOn = false;
+
+					//ScoreText.text = "You lose!";
+
+				}
+			}
+		}
 	}
-	
 }
