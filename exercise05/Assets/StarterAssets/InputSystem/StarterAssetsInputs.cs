@@ -115,7 +115,7 @@ namespace StarterAssets
 		{
 			if (TimerOn)
 			{
-				if (TimeLeft > 0 && score < 6)
+				if (TimeLeft > 0 && score < 5)
 				{
 					TimeLeft -= Time.deltaTime;
 					IntTimeLeft = (int)Mathf.Round(TimeLeft);
