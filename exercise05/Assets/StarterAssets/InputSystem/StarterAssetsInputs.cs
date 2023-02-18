@@ -39,7 +39,7 @@ namespace StarterAssets
 			score = 1;
 			TimerOn = true;
 			GameOn = true;
-			TimeLeft = 30;
+			TimeLeft = 60;
 			LooseText.enabled = false;
 			WinText.enabled = false;
 		}
@@ -115,13 +115,13 @@ namespace StarterAssets
 		{
 			if (TimerOn)
 			{
-				if (TimeLeft > 0 && score < 7)
+				if (TimeLeft > 0 && score < 6)
 				{
 					TimeLeft -= Time.deltaTime;
 					IntTimeLeft = (int)Mathf.Round(TimeLeft);
 					TimerText.text = IntTimeLeft.ToString();
 				}
-				else if (TimeLeft > 0 && score == 7)
+				else if (TimeLeft > 0 && score == 5)
 				{
 					WinText.enabled = true;
 
@@ -137,7 +137,7 @@ namespace StarterAssets
 
 					GameOn = false;
 
-					//ScoreText.text = "You lose!";
+				
 
 				}
 			}
