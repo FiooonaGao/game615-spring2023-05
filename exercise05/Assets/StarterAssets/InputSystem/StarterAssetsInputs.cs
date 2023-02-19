@@ -25,9 +25,10 @@ namespace StarterAssets
 		public int score;
 		public int IntTimeLeft;
 		public bool GameOn = false;
+		[SerializeField] GameObject collectEffect;
 
 
-		[Header("Movement Settings")]
+        [Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
@@ -107,40 +108,44 @@ namespace StarterAssets
 				Destroy(other.gameObject);
 				ScoreText.text = score.ToString();
 				score++;
-			}
+				GameObject explosion = Instantiate(collectEffect, transform.position, transform.rotation);
+				Destroy(explosion, 2f);
+            }
 		}
 
 
 		void Update()
 		{
-			if (TimerOn)
-			{
-				if (TimeLeft > 0 && score < 5)
+	
+
+				if (TimerOn)
 				{
-					TimeLeft -= Time.deltaTime;
-					IntTimeLeft = (int)Mathf.Round(TimeLeft);
-					TimerText.text = IntTimeLeft.ToString();
-				}
-				else if (TimeLeft > 0 && score == 5)
-				{
-					WinText.enabled = true;
+					if (TimeLeft > 0 && score < 5)
+					{
+						TimeLeft -= Time.deltaTime;
+						IntTimeLeft = (int)Mathf.Round(TimeLeft);
+						TimerText.text = IntTimeLeft.ToString();
+					}
+					else if (TimeLeft > 0 && score == 5)
+					{
+						WinText.enabled = true;
 
-					GameOn = false;
-				}
-				else
-				{
-					TimeLeft = 0;
-					TimerText.text = TimeLeft.ToString();
-					IntTimeLeft = (int)Mathf.Round(TimeLeft);
-					TimerOn = false;
-					LooseText.enabled = true;
+						GameOn = false;
+					}
+					else
+					{
+						TimeLeft = 0;
+						TimerText.text = TimeLeft.ToString();
+						IntTimeLeft = (int)Mathf.Round(TimeLeft);
+						TimerOn = false;
+						LooseText.enabled = true;
 
-					GameOn = false;
+						GameOn = false;
 
-				
 
+
+					}
 				}
 			}
 		}
 	}
-}
